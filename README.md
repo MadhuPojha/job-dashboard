@@ -12,7 +12,9 @@ Software
 
 ## ✨ Features
 🔍 Scrapes latest LinkedIn jobs
+
 🧠 Automatically groups jobs by type
+
 ⚡ Fast API using FastAPI
 🎨 Clean frontend UI
 🌙 Dark / Light mode
