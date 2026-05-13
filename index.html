@@ -1,166 +1,473 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Job Dashboard</title>
+    <title>Job Dashboard</title>
 
-<style>
-body {
-    font-family: Arial;
-    margin: 0;
-    padding: 20px;
-    transition: 0.3s;
-}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            transition: 0.3s;
+        }
 
-.theme-toggle {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    cursor: pointer;
-    background: rgba(0,0,0,0.1);
-    backdrop-filter: blur(6px);
-    transition: 0.3s;
-    user-select: none;
-}
+        /* HERO */
+        .hero {
+            padding: 40px 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
 
-.light .theme-toggle {
-    background: white;
-}
+            background: linear-gradient(135deg, #4da3ff, #6c63ff);
+            color: white;
 
-.dark .theme-toggle {
-    background: #1f1f1f;
-}
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
 
-/* LIGHT MODE */
-.light {
-    background: #f5f5f5;
-    color: #111;
-}
+        .hero h1 {
+            margin: 0;
+            font-size: 34px;
+            letter-spacing: -0.5px;
+        }
 
-/* DARK MODE */
-.dark {
-    background: #121212;
-    color: white;
-}
+        .hero p {
+            margin-top: 10px;
+            max-width: 600px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
 
-.job {
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.1);
-}
+        .hero-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            font-size: 13px;
+        }
+        /* FOOTER */
+        .footer {
+            margin-top: 60px;
+            padding: 40px 20px 20px;
 
-.light .job {
-    background: white;
-    color: black;
-}
+            border-top: 1px solid rgba(255,255,255,0.08);
 
-button, select {
-    padding: 8px;
-    margin: 5px;
-    cursor: pointer;
-}
+            background: linear-gradient(135deg, #4da3ff, #6c63ff);
+            color: white;
 
-.topbar {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-}
-</style>
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+            border-radius: 20px 20px 0 0;
+        }
+
+        .footer-content {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 30px;
+
+            margin-bottom: 30px;
+        }
+
+        .footer-brand h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .footer-brand p {
+            opacity: 0.75;
+            line-height: 1.6;
+            font-size: 20px;
+        }
+
+        .footer-bottom {
+            background: linear-gradient(135deg, #4da3ff, #6c63ff);
+            color: white;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding-top: 20px;
+
+            text-align: center;
+
+            font-size: 13px;
+            opacity: 0.6;
+        }
+
+        /* TOPBAR (make it SaaS-like floating control bar) */
+        .topbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            align-items: center;
+
+            padding: 12px;
+            border-radius: 12px;
+
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .dark .topbar {
+            background: rgba(30, 30, 30, 0.6);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(6px);
+        }
+
+        .light {
+            background: #f5f6fa;
+            color: #111;
+        }
+
+        .dark {
+            background: #121212;
+            color: white;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        .topbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        select,
+        button {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        button {
+            background: #4da3ff;
+            color: white;
+            border: none;
+        }
+
+        /* GRID LAYOUT */
+        #jobs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .job {
+            padding: 16px;
+            border-radius: 14px;
+            background: white;
+            color: black;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: 0.25s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .job:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .dark .job {
+            background: #1e1e1e;
+            color: white;
+            border: 1px solid #333;
+        }
+
+        .job-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .job-meta {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: #eaeaea;
+        }
+
+        .dark .badge {
+            background: #333;
+        }
+
+        .job-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #4da3ff;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .job-link:hover {
+            text-decoration: underline;
+        }
+
+        #topBtn {
+            position: fixed;
+
+            bottom: 30px;
+            right: 30px; /* keep on RIGHT side */
+
+            width: 58px;
+            height: 58px;
+
+            border: none;
+            outline: none;
+
+            border-radius: 50%;
+
+            cursor: pointer;
+
+            font-size: 24px;
+            font-weight: bold;
+
+            color: white;
+
+            background: linear-gradient(135deg, #4da3ff, #6c63ff);
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,0.25),
+                0 2px 8px rgba(77,163,255,0.35);
+
+            opacity: 0;
+            visibility: hidden;
+
+            transform: translateY(20px) scale(0.9);
+
+            transition:
+                opacity 0.25s ease,
+                transform 0.25s ease,
+                visibility 0.25s;
+
+            z-index: 9999;
+
+            pointer-events: none;
+        }
+
+        /* SHOW BUTTON */
+        #topBtn.show {
+            opacity: 1;
+            visibility: visible;
+
+            transform: translateY(0) scale(1);
+
+            pointer-events: auto;
+        }
+
+        /* HOVER EFFECT */
+        #topBtn:hover {
+            transform: translateY(-4px) scale(1.05);
+
+            box-shadow:
+                0 12px 24px rgba(0,0,0,0.3),
+                0 4px 12px rgba(77,163,255,0.4);
+        }
+
+        /* CLICK EFFECT */
+        #topBtn:active {
+            transform: scale(0.95);
+        }
+
+    </style>
 </head>
 
-<body class="light">
+<body class="dark">
 
-<h2>Job Dashboard</h2>
+    <div class="hero">
 
-<div class="topbar">
+        <div class="hero-text">
+            <h1>LinkedIn Job Feed</h1>
 
-<div class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
-    🌙
-</div>
+            <p>
+                Discover curated LinkedIn job openings for AI, software, and engineering roles. <br />
+                Fast, clean, and distraction-free job browsing experience. <br />
+                ⚡ Real-time listings 🎯 Smart filters
 
-<select id="filter" onchange="renderJobs()">
-    <option value="All">All</option>
-    <option value="AI/ML">AI/ML</option>
-    <option value="Frontend">Frontend</option>
-    <option value="Backend">Backend</option>
-    <option value="Fullstack">Fullstack</option>
-    <option value="System">System</option>
-    <option value="Software">Software</option>
-</select>
+            </p>
 
-<button onclick="loadJobs()">🔄 Refresh</button>
+        </div>
 
-</div>
+    </div>
 
-<div id="jobs"></div>
+    <div class="topbar">
 
-<script>
+        <div class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</div>
 
-let allJobs = [];
 
-async function loadJobs() {
-    const res = await fetch('/api/jobs');
-    allJobs = await res.json();
-    renderJobs();
-}
+        <select id="filter" onchange="renderJobs()">
+            <option value="All">All</option>
+            <option value="AI/ML">AI/ML</option>
+            <option value="Frontend">Frontend</option>
+            <option value="Backend">Backend</option>
+            <option value="Fullstack">Fullstack</option>
+            <option value="System">System</option>
+            <option value="Software">Software</option>
+        </select>
 
-function renderJobs() {
-    const filter = document.getElementById("filter").value;
-    const container = document.getElementById("jobs");
+        <button onclick="loadJobs()">🔄 Refresh</button>
 
-    container.innerHTML = "";
+    </div>
 
-    let jobs = allJobs;
+    <div id="jobs"></div>
+    <button id="topBtn" onclick="scrollToTop()">⬆</button>
+    <script>
 
-    if (filter !== "All") {
-        jobs = jobs.filter(j => j.role === filter);
-    }
+        let allJobs = [];
 
-    jobs.forEach(job => {
-        const div = document.createElement("div");
-        div.className = "job";
+        async function loadJobs() {
 
-        div.innerHTML = `
-            <b>${job.title}</b><br>
-            <small>${job.source} • ${job.role}</small><br>
-            <a href="${job.link}" target="_blank">View Job →</a>
-        `;
+            const container = document.getElementById("jobs");
+            const btn = document.getElementById("topBtn");
 
-        container.appendChild(div);
-    });
-}
+            // hide button while loading
+            btn.classList.remove("show");
+            container.innerHTML = "Loading jobs...";
 
-function toggleTheme() {
-    document.body.classList.toggle("dark");
-    document.body.classList.toggle("light");
-}
+            try {
 
-loadJobs();
+                const res = await fetch('/api/jobs');
+                allJobs = await res.json();
 
-function toggleTheme() {
-    const body = document.body;
-    const btn = document.getElementById("themeBtn");
+                console.log(allJobs);
 
-    body.classList.toggle("dark");
-    body.classList.toggle("light");
+                renderJobs();
 
-    // switch icon
-    if (body.classList.contains("dark")) {
-        btn.innerHTML = "☀️";
-    } else {
-        btn.innerHTML = "🌙";
-    }
-}
+            } catch (err) {
 
-</script>
+                console.error(err);
+
+                container.innerHTML = "Failed to load jobs";
+
+            }
+        }
+
+        function renderJobs() {
+
+            const filter = document.getElementById("filter").value;
+            const container = document.getElementById("jobs");
+
+            container.innerHTML = "";
+
+            let jobs = allJobs;
+
+            if (filter !== "All") {
+
+                jobs = jobs.filter(j =>
+                    j.role &&
+                    j.role.toLowerCase() === filter.toLowerCase()
+                );
+            }
+
+            if (jobs.length === 0) {
+                container.innerHTML = "<h3>No jobs found</h3>";
+                return;
+            }
+
+            jobs.forEach(job => {
+
+                const div = document.createElement("div");
+
+                div.className = "job";
+
+                div.innerHTML = `
+                    <div class="job-title">${job.title || "No title"}</div>
+
+                        <div class="job-meta">
+                            <span class="badge">${job.source || "LinkedIn"}</span>
+                            ${job.role ? `<span class="badge">${job.role}</span>` : ""}
+                        </div>
+
+                        <a class="job-link" href="${job.link}" target="_blank">
+                            View Job →
+                        </a>
+                `;
+
+                container.appendChild(div);
+            });
+        }
+
+        function toggleTheme() {
+
+            const body = document.body;
+            const btn = document.getElementById("themeBtn");
+
+            body.classList.toggle("dark");
+            body.classList.toggle("light");
+
+            if (body.classList.contains("dark")) {
+                btn.innerHTML = "☀️";
+            } else {
+                btn.innerHTML = "🌙";
+            }
+        }
+
+        loadJobs();
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const btn = document.getElementById("topBtn");
+
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 200) {
+                    btn.classList.add("show");
+                } else {
+                    btn.classList.remove("show");
+                }
+            });
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+    </script>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>LinkedIn Job Feed</h3>
+                <p>
+                    Discover curated LinkedIn software engineering jobs with a fast,
+                    modern, and distraction-free experience.
+                </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 LinkedIn Job Feed • Built with FastAPI & Playwright
+        </div>
+    </footer>
 
 </body>
+
 </html>
