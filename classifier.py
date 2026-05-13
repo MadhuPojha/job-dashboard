@@ -1,92 +1,42 @@
 from rapidfuzz import fuzz
 
-AI_ML_KEYWORDS = [
-    "machine learning",
-    "ml engineer",
-    "ai engineer",
-    "artificial intelligence",
-    "data scientist",
-    "mlops",
-    "deep learning",
-    "computer vision",
-    "nlp"
+AI_ML = [
+    "machine learning", "ai engineer", "ml engineer",
+    "data scientist", "deep learning", "nlp",
+    "artificial intelligence", "computer vision", "mlops"
 ]
 
-FULLSTACK_KEYWORDS = [
-    "full stack",
-    "software engineer (full",
-    "full-stack",
-    "backend + frontend",
-    "react + python",
-    "node + react"
-]
-
-FRONTEND_KEYWORDS = [
-    "frontend",
-    "front end",
-    "react",
-    "angular",
-    "vue"
-]
-
-BACKEND_KEYWORDS = [
-    "backend",
-    "django",
-    "flask",
-    "spring",
-    "api"
-]
-
-SYSTEM_KEYWORDS = [
-    "devops",
-    "aws",
-    "kubernetes",
-    "cloud",
-    "platform engineer",
-    "site reliability"
+FULLSTACK = [
+    "full stack", "fullstack", "react", "node", "django"
 ]
 
 EXCLUDE = [
-    "ux designer",
-    "product manager"
+    "ux designer", "product manager", "recruiter"
 ]
-
-
-def score(title, keywords):
-    return max(fuzz.partial_ratio(title.lower(), k) for k in keywords)
 
 
 def classify(title: str):
     t = title.lower()
 
-    # ❌ exclude first
     if any(x in t for x in EXCLUDE):
         return None
 
-    # 🧠 AI/ML (highest priority after fullstack)
-    if score(t, AI_ML_KEYWORDS) > 75:
+    ai_score = max(fuzz.partial_ratio(t, k) for k in AI_ML)
+    fs_score = max(fuzz.partial_ratio(t, k) for k in FULLSTACK)
+
+    if ai_score > 80:
         return "AI/ML"
 
-    # 🚀 FULLSTACK (FIXED: broader detection)
-    if (
-        "full stack" in t
-        or "fullstack" in t
-        or score(t, FULLSTACK_KEYWORDS) > 70
-        or ("react" in t and "backend" in t)
-        or ("frontend" in t and "backend" in t)
-    ):
+    if fs_score > 80:
         return "Fullstack"
 
-    # 🎨 Frontend
-    if score(t, FRONTEND_KEYWORDS) > 75:
+    if "frontend" in t:
         return "Frontend"
 
-    # ⚙️ Backend
-    if score(t, BACKEND_KEYWORDS) > 75:
+    if "backend" in t:
         return "Backend"
 
-    # ☁️ System
-    if score(t, SYSTEM_KEYWORDS) > 75:
+    if "devops" in t or "aws" in t:
         return "System"
 
     return "Software"
